@@ -113,6 +113,11 @@ else if (action === "save") {
   execSync(msg)
 
   function done () {
+    if (windows.length === 0) {
+      execSync(`notify-send "No windows were selected"`)
+      process.exit(0)
+    }
+
     console.info(windows.join("\n"))
 
     let wins
