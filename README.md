@@ -18,6 +18,14 @@ Restore group windows of mygroup1
 
 Properties read from ~/.config/grop/mygroup1
 
+>grop swap mygroup1
+
+Interactive mode to swap two windows from a group
+
+Same point and Ctrl mechanic
+
+This is still experimental
+
 ## About
 
 I made this for KDE Plasma since there are no independent workspaces per monitor.
