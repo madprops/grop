@@ -4,17 +4,11 @@
 - Point each window you want to save and hit Ctrl within 5 seconds
 - When you want to restore that group trigger the 'restore' command
 - Save and Restore commands should be programmed to keyboard shortcuts
+- This is a way to simulate workspaces inside the same workspace
 
 ## About
 
 I made this for KDE Plasma since there are no independent workspaces per monitor.
-
-But it should work with pretty much any wm/de.
-
-What this does is it allows you to enter an interactive mode
-where you select the windows you want to be part of a specific group.
-
-Then you can restore these groups any time.
 
 This allows for different window combinations in the same workspace.
 
