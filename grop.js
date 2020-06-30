@@ -162,8 +162,6 @@ else if (action === "restore") {
       let height = parseInt(split[2]) + tbar
       let x = parseInt(split[3])
       let y = parseInt(split[4]) - tbar
-
-      console.log(tbar)
       
       console.info(`Restoring: ${window}`)
       execSync(`wmctrl -ir ${id} -b add,maximized_vert,maximized_horz`)
