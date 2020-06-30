@@ -156,12 +156,11 @@ else if (action === "restore") {
     if (window) {
       let split = window.split(" ")
       let id = split[0]
-      let tbar = get_titlebar_height(id)
-      tbar = 0
+      // let tbar = get_titlebar_height(id)
       let width = parseInt(split[1])
-      let height = parseInt(split[2]) + tbar
+      let height = parseInt(split[2])
       let x = parseInt(split[3])
-      let y = parseInt(split[4]) - tbar
+      let y = parseInt(split[4])
       
       console.info(`Restoring: ${window}`)
       execSync(`wmctrl -ir ${id} -b add,maximized_vert,maximized_horz`)
