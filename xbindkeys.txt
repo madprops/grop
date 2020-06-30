@@ -1,32 +1,59 @@
-# grop shortcuts
-
 # --- Save ---
 
 "node /home/yo/code/grop/grop.js save g1"
-  Shift+Mod2+Mod4 + KP_End
+  Control+Mod2+Mod4 + KP_End
 
 "node /home/yo/code/grop/grop.js save g2"
-  Shift+Mod2+Mod4 + KP_Down
+  Control+Mod2+Mod4 + KP_Down
 
 "node /home/yo/code/grop/grop.js save g3"
-  Shift+Mod2+Mod4 + KP_Next
+  Control+Mod2+Mod4 + KP_Next
 
 "node /home/yo/code/grop/grop.js save g4"
-  Shift+Mod2+Mod4 + KP_Left
+  Control+Mod2+Mod4 + KP_Left
 
 "node /home/yo/code/grop/grop.js save g5"
-  Shift+Mod2+Mod4 + KP_Begin
+  Control+Mod2+Mod4 + KP_Begin
 
 "node /home/yo/code/grop/grop.js save g6"
-  Shift+Mod2+Mod4 + KP_Right
+  Control+Mod2+Mod4 + KP_Right
 
 "node /home/yo/code/grop/grop.js save g7"
-  Shift+Mod2+Mod4 + KP_Home
+  Control+Mod2+Mod4 + KP_Home
 
 "node /home/yo/code/grop/grop.js save g8"
-  Shift+Mod2+Mod4 + KP_Up
+  Control+Mod2+Mod4 + KP_Up
 
 "node /home/yo/code/grop/grop.js save g9"
+  Control+Mod2+Mod4 + KP_Prior
+
+# --- Swap ---
+
+"node /home/yo/code/grop/grop.js swap g1"
+  Shift+Mod2+Mod4 + KP_End
+
+"node /home/yo/code/grop/grop.js swap g2"
+  Shift+Mod2+Mod4 + KP_Down
+
+"node /home/yo/code/grop/grop.js swap g3"
+  Shift+Mod2+Mod4 + KP_Next
+
+"node /home/yo/code/grop/grop.js swap g4"
+  Shift+Mod2+Mod4 + KP_Left
+
+"node /home/yo/code/grop/grop.js swap g5"
+  Shift+Mod2+Mod4 + KP_Begin
+
+"node /home/yo/code/grop/grop.js swap g6"
+  Shift+Mod2+Mod4 + KP_Right
+
+"node /home/yo/code/grop/grop.js swap g7"
+  Shift+Mod2+Mod4 + KP_Home
+
+"node /home/yo/code/grop/grop.js swap g8"
+  Shift+Mod2+Mod4 + KP_Up
+
+"node /home/yo/code/grop/grop.js swap g9"
   Shift+Mod2+Mod4 + KP_Prior
 
 # --- Restore ---
@@ -57,32 +84,3 @@
 
 "node /home/yo/code/grop/grop.js restore g9"
   Mod2+Mod4 + KP_Prior
-
-# --- Swap ---
-
-"node /home/yo/code/grop/grop.js swap g1"
-  Control+Mod2+Mod4 + KP_End
-
-"node /home/yo/code/grop/grop.js swap g2"
-  Control+Mod2+Mod4 + KP_Down
-
-"node /home/yo/code/grop/grop.js swap g3"
-  Control+Mod2+Mod4 + KP_Next
-
-"node /home/yo/code/grop/grop.js swap g4"
-  Control+Mod2+Mod4 + KP_Left
-
-"node /home/yo/code/grop/grop.js swap g5"
-  Control+Mod2+Mod4 + KP_Begin
-
-"node /home/yo/code/grop/grop.js swap g6"
-  Control+Mod2+Mod4 + KP_Right
-
-"node /home/yo/code/grop/grop.js swap g7"
-  Control+Mod2+Mod4 + KP_Home
-
-"node /home/yo/code/grop/grop.js swap g8"
-  Control+Mod2+Mod4 + KP_Up
-
-"node /home/yo/code/grop/grop.js swap g9"
-  Control+Mod2+Mod4 + KP_Prior
