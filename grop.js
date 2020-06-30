@@ -142,7 +142,6 @@ else if (action === "restore") {
     if (window) {
       let split = window.split(" ")
       let id = split[0]
-      let tbar = get_titlebar_height(id)
       let width = parseInt(split[1])
       let height = parseInt(split[2])
       let x = parseInt(split[3])
