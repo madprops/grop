@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "iohook": "~0.6.5"
+  }
+}

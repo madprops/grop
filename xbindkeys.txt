@@ -1,0 +1,54 @@
+"node /home/yo/code/grop/grop.js save g1"
+  Shift+Mod2+Mod4 + KP_End
+
+"node /home/yo/code/grop/grop.js save g2"
+  Shift+Mod2+Mod4 + KP_Down
+
+"node /home/yo/code/grop/grop.js save g3"
+  Shift+Mod2+Mod4 + KP_Next
+
+"node /home/yo/code/grop/grop.js save g4"
+  Shift+Mod2+Mod4 + KP_Left
+
+"node /home/yo/code/grop/grop.js save g5"
+  Shift+Mod2+Mod4 + KP_Begin
+
+"node /home/yo/code/grop/grop.js save g6"
+  Shift+Mod2+Mod4 + KP_Right
+
+"node /home/yo/code/grop/grop.js save g7"
+  Shift+Mod2+Mod4 + KP_Home
+
+"node /home/yo/code/grop/grop.js save g8"
+  Shift+Mod2+Mod4 + KP_Up
+
+"node /home/yo/code/grop/grop.js save g9"
+  Shift+Mod2+Mod4 + KP_Prior
+
+
+"node /home/yo/code/grop/grop.js restore g1"
+  Mod2+Mod4 + KP_End
+
+"node /home/yo/code/grop/grop.js restore g2"
+  Mod2+Mod4 + KP_Down
+
+"node /home/yo/code/grop/grop.js restore g3"
+  Mod2+Mod4 + KP_Next
+
+"node /home/yo/code/grop/grop.js restore g4"
+  Mod2+Mod4 + KP_Left
+
+"node /home/yo/code/grop/grop.js restore g5"
+  Mod2+Mod4 + KP_Begin
+
+"node /home/yo/code/grop/grop.js restore g6"
+  Mod2+Mod4 + KP_Right
+
+"node /home/yo/code/grop/grop.js restore g7"
+  Mod2+Mod4 + KP_Home
+
+"node /home/yo/code/grop/grop.js restore g8"
+  Mod2+Mod4 + KP_Up
+
+"node /home/yo/code/grop/grop.js restore g9"
+  Mod2+Mod4 + KP_Prior
