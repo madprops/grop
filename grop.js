@@ -17,24 +17,6 @@ const bpath = path.normalize(`${home}/.config/grop`)
 const fpath = path.normalize(`${bpath}/${gname}`)
 const time_to_pick = 5
 
-function get_titlebar_height (id) {
-  let cmd = `xwininfo -id "${id}" -wm`
-  let output = execSync(cmd).toString().trim()
-
-  let titlebar_height = 0
-
-  for(let line of output.split("\n")) {
-    if (line.includes("Frame extents")) {
-      let split = output.split("xtents:")
-      let nums = split[split.length - 1]
-      let num_splits = nums.split(", ")
-      titlebar_height = parseInt(num_splits[2])
-    }
-  }
-
-  return titlebar_height
-}
-
 function extract_number (s) {
   let match = s.match(/(^|\s)(-?\d+)($|\s)/g)
 
@@ -54,6 +36,10 @@ function get_windows () {
   return fs.readFileSync(fpath, 'utf8').split("\n")
 }
 
+function popup (msg) {
+  execSync(`notify-send "${msg}"`)
+}
+
 function save_windows (content) {
   try {
     if (fs.existsSync(fpath)) {
@@ -70,6 +56,21 @@ function save_windows (content) {
   }
 }
 
+function start_hook (on_keydown, done) {
+  const ioHook = require('iohook')
+  ioHook.on("keydown", on_keydown)
+
+  process.on('exit', () => {
+    ioHook.unload()
+  })
+
+  setTimeout (function () {
+    done()
+  }, time_to_pick * 1000)
+
+  ioHook.start()
+}
+
 function restore_group () {
   let windows = get_windows()
 
@@ -77,7 +78,6 @@ function restore_group () {
     if (window) {
       let split = window.split(" ")
       let id = split[0]
-      // let tbar = get_titlebar_height(id)
       let width = parseInt(split[1])
       let height = parseInt(split[2])
       let x = parseInt(split[3])
@@ -92,52 +92,14 @@ function restore_group () {
   }
 }
 
-if (!action) {
-  let s = `Usage: 
-  grop save mygroup = Start interactive mode
-  grop restore mygroup = Restore group windows
-  grop swap mygroup = Swap two windows from a group`
-  console.info(s)
-}
-
-if (action === "restore") {
-  restore_group()
-}
-
-else if (action === "save") {
+function save_group () {
+  let windows = []
+  popup(`Saving ${gname}\nPoint and press Ctrl on windows\nWithin the next ${time_to_pick} seconds`)
   console.info(`Saving windows for ${gname}`)
 
-  let windows = []
-
-  let msg = `notify-send "Saving ${gname}\nPoint and press Ctrl on windows\nWithin the next ${time_to_pick} seconds"`
-  execSync(msg)
-
-  function done () {
-    if (windows.length === 0) {
-      execSync(`notify-send "No windows were selected"`)
-      process.exit(0)
-    }
-
-    console.info(windows.join("\n"))
-
-    let wins
-
-    if (windows.length === 1) {
-      wins = "window"
-    } else {
-      wins = "windows"
-    }
-
-    execSync(`notify-send "${windows.length} ${wins} saved"`)
-    save_windows(windows.join("\n"))
-    process.exit(0)
-  }
-
-  const ioHook = require('iohook')
-
-  ioHook.on("keydown", event => {
+  start_hook(function (event) {
     if (event.keycode == 1) {
-      execSync(`notify-send "Group save aborted"`)
+      popup("Group save aborted")
       process.exit(0)
     }
 
@@ -158,7 +120,7 @@ else if (action === "save") {
       output = execSync(cmd).toString()
 
       let width, height, x, y
-      
+    
       for(let line of output.split("\n")) {
         if (line.includes('Width')) {
           width = extract_number(line)
@@ -175,36 +137,37 @@ else if (action === "save") {
       let window = `${winid} ${width} ${height} ${x} ${y}`
       windows.push(window)
     }
+  }, function () {
+    if (windows.length === 0) {
+      popup("No windows were selected")
+      process.exit(0)
+    }
+
+    console.info(windows.join("\n"))
+
+    let wins
+
+    if (windows.length === 1) {
+      wins = "window"
+    } else {
+      wins = "windows"
+    }
+
+    popup(`${windows.length} ${wins} saved`)
+    save_windows(windows.join("\n"))
+    process.exit(0)
   })
-
-  process.on('exit', () => {
-    ioHook.unload()
-  })
-
-  setTimeout (function () {
-    done()
-  }, time_to_pick * 1000)
-
-  ioHook.start()
 }
 
-else if (action === "swap") {
+function swap_windows () {
   let windows = get_windows()
   let items = []
 
-  function done () {
-    execSync(`notify-send "Swap time is up"`)
-    process.exit(0)
-  }
+  popup(`Changing ${gname}\nPoint and press Ctrl on two windows\nWithin the next ${time_to_pick} seconds`)
 
-  let msg = `notify-send "Changing ${gname}\nPoint and press Ctrl on two windows\nWithin the next ${time_to_pick} seconds"`
-  execSync(msg)
-
-  const ioHook = require('iohook')
-
-  ioHook.on("keydown", event => {
+  start_hook(function (event) {
     if (event.keycode == 1) {
-      execSync(`notify-send "Window swap aborted"`)
+      popup("Window swap aborted")
       process.exit(0)
     }
 
@@ -241,16 +204,13 @@ else if (action === "swap") {
       items.push({id:winid, index:index})
 
       if (items.length === 2) {
-        console.log(items)
         let split = windows[items[0].index].split(" ")
         let split2 = windows[items[1].index].split(" ")
 
         if (split[0] === items[0].id) {
-          console.log(1)
           split[0] = items[1].id
           split2[0] = items[0].id
         } else {
-          console.log(2)
           split[0] = items[0].id
           split2[0] = items[1].id
         }
@@ -258,20 +218,33 @@ else if (action === "swap") {
         windows[items[0].index] = split.join(" ")
         windows[items[1].index] = split2.join(" ")
         save_windows(windows.join("\n"))
-        execSync(`notify-send "Windows swapped"`)
+        popup("Windows swapped")
         restore_group()
         process.exit(0)
       }
     }
+  }, function () {
+    popup("Swap time is up")
+    process.exit(0)
   })
+}
 
-  process.on('exit', () => {
-    ioHook.unload()
-  })
+if (!action) {
+  let s = `Usage: 
+  grop save mygroup = Start interactive mode
+  grop restore mygroup = Restore group windows
+  grop swap mygroup = Swap two windows from a group`
+  console.info(s)
+}
 
-  setTimeout (function () {
-    done()
-  }, time_to_pick * 1000)
+if (action === "restore") {
+  restore_group()
+}
 
-  ioHook.start()
+else if (action === "save") {
+  save_group()
+}
+
+else if (action === "swap") {
+  swap_windows()
 }
