@@ -17,59 +17,27 @@ const bpath = path.normalize(`${home}/.config/grop`)
 const fpath = path.normalize(`${bpath}/${gname}`)
 const time_to_pick = 5
 
-function extract_number (s) {
-  let match = s.match(/(^|\s)(-?\d+)($|\s)/g)
-
-  if(match) {
-    return parseInt(match[0].trim())
-  } else {
-    return 0
-  }
+if (!action) {
+  let s = `Usage: 
+  grop save mygroup = Start interactive mode
+  grop restore mygroup = Restore group windows
+  grop swap mygroup = Swap two windows from a group`
+  console.info(s)
 }
 
-function get_windows () {
-  if (!fs.existsSync(fpath)) {
-    console.info("Group does not exist.")
-    process.exit(0)
-  }
-
-  return fs.readFileSync(fpath, 'utf8').split("\n")
+else if (action === "restore") {
+  restore_group()
 }
 
-function popup (msg) {
-  execSync(`notify-send "${msg}"`)
+else if (action === "save") {
+  save_group()
 }
 
-function save_windows (content) {
-  try {
-    if (fs.existsSync(fpath)) {
-      fs.unlinkSync(fpath)
-    }
-  
-    if (!fs.existsSync(bpath)){
-      fs.mkdirSync(bpath)
-    }
-  
-    fs.writeFileSync(fpath, content)
-  } catch (err) {
-    console.error(err)
-  }
+else if (action === "swap") {
+  swap_windows()
 }
 
-function start_hook (on_keydown, done) {
-  const ioHook = require('iohook')
-  ioHook.on("keydown", on_keydown)
-
-  process.on('exit', () => {
-    ioHook.unload()
-  })
-
-  setTimeout (function () {
-    done()
-  }, time_to_pick * 1000)
-
-  ioHook.start()
-}
+// Implementations
 
 function restore_group () {
   let windows = get_windows()
@@ -229,22 +197,58 @@ function swap_windows () {
   })
 }
 
-if (!action) {
-  let s = `Usage: 
-  grop save mygroup = Start interactive mode
-  grop restore mygroup = Restore group windows
-  grop swap mygroup = Swap two windows from a group`
-  console.info(s)
+// Utils
+
+function extract_number (s) {
+  let match = s.match(/(^|\s)(-?\d+)($|\s)/g)
+
+  if(match) {
+    return parseInt(match[0].trim())
+  } else {
+    return 0
+  }
 }
 
-if (action === "restore") {
-  restore_group()
+function get_windows () {
+  if (!fs.existsSync(fpath)) {
+    console.info("Group does not exist.")
+    process.exit(0)
+  }
+
+  return fs.readFileSync(fpath, 'utf8').split("\n")
 }
 
-else if (action === "save") {
-  save_group()
+function popup (msg) {
+  execSync(`notify-send "${msg}"`)
 }
 
-else if (action === "swap") {
-  swap_windows()
+function save_windows (content) {
+  try {
+    if (fs.existsSync(fpath)) {
+      fs.unlinkSync(fpath)
+    }
+  
+    if (!fs.existsSync(bpath)){
+      fs.mkdirSync(bpath)
+    }
+  
+    fs.writeFileSync(fpath, content)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+function start_hook (on_keydown, done) {
+  const ioHook = require('iohook')
+  ioHook.on("keydown", on_keydown)
+
+  process.on('exit', () => {
+    ioHook.unload()
+  })
+
+  setTimeout (function () {
+    done()
+  }, time_to_pick * 1000)
+
+  ioHook.start()
 }
