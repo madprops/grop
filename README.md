@@ -26,8 +26,6 @@ Same point and Ctrl mechanic
 
 This is still experimental
 
-![](https://i.imgur.com/Ac6ee0t.gif)
-
 ## About
 
 I made this for KDE Plasma since there are no independent workspaces per monitor.
@@ -49,3 +47,5 @@ Escape cancels the save operation while on interactive mode.
  - Window Height
  - Window X Position
  - Window Y Position
+
+https://i.imgur.com/eVQrm1m.gif
