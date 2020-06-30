@@ -17,19 +17,31 @@ const fpath = path.normalize(`${bpath}/${gname}`)
 const time_to_pick = 5
 
 function get_titlebar_height (id) {
-  let cmd = `xwininfo -id "${id}" -wm | grep "Frame extents"`
+  let cmd = `xwininfo -id "${id}" -wm`
   let output = execSync(cmd).toString().trim()
 
   let titlebar_height = 0
 
-  if (output) {
-    let split = output.split("xtents:")
-    let nums = split[split.length - 1]
-    let num_splits = nums.split(", ")
-    titlebar_height = parseInt(num_splits[2])
+  for(let line of output.split("\n")) {
+    if (line.includes("Frame extents")) {
+      let split = output.split("xtents:")
+      let nums = split[split.length - 1]
+      let num_splits = nums.split(", ")
+      titlebar_height = parseInt(num_splits[2])
+    }
   }
 
   return titlebar_height
+}
+
+function extract_number (s) {
+  let match = s.match(/(^|\s)(-?\d+)($|\s)/g)
+
+  if(match) {
+    return parseInt(match[0].trim())
+  } else {
+    return 0
+  }
 }
 
 if (!action) {
@@ -105,13 +117,14 @@ else if (action === "save") {
       
       for(let line of output.split("\n")) {
         if (line.includes('Width')) {
-          width = parseInt(line.replace(/\D+/g, '').trim())
+          width = extract_number(line)
         } else if (line.includes('Height')) {
-          height =parseInt( line.replace(/\D+/g, '').trim())
+          height = extract_number(line)
         } else if (line.includes('Absolute upper-left X')) {
-          x = parseInt(line.replace(/\D+/g, '').trim())
+          x = extract_number(line)
         } else if (line.includes('Absolute upper-left Y')) {
-          y = parseInt(line.replace(/\D+/g, '').trim())
+          y = extract_number(line)
+          y = extract_number(line)
         }
       }
 
@@ -142,16 +155,16 @@ else if (action === "restore") {
     if (window) {
       let split = window.split(" ")
       let id = split[0]
+      let tbar = get_titlebar_height(id)
       let width = parseInt(split[1])
-      let height = parseInt(split[2])
+      let height = parseInt(split[2]) + tbar
       let x = parseInt(split[3])
-      let y = parseInt(split[4])
+      let y = parseInt(split[4]) - tbar
       
       console.info(`Restoring: ${window}`)
       execSync(`wmctrl -ir ${id} -b add,maximized_vert,maximized_horz`)
       execSync(`wmctrl -ir ${id} -b remove,maximized_vert,maximized_horz`)
-      execSync(`xdotool windowsize ${id} ${width} ${height}`)
-      execSync(`xdotool windowmove ${id} ${x} ${y}`)
+      execSync(`wmctrl -ia "${id}" -e 0,${x},${y},${width},${height}`)
       execSync(`wmctrl -ia ${id}`)
     }
   }
