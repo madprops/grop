@@ -1,7 +1,7 @@
 ## Intended Usage
 
 - Trigger the interactive mode with the 'save' command
-- Point each window you want to save and hit Ctrl within 5 seconds
+- Point to each window you want to save withe the mouse cursor and hit Ctrl within 5 seconds
 - When you want to restore that group trigger the 'restore' command
 - Save and Restore commands should be programmed to keyboard shortcuts
 - This is a way to simulate workspaces inside the same workspace
@@ -29,6 +29,8 @@ This uses window ids so it can work with multiple instances of a program.
 This means the groups will need to be created everytime the windows start.
 
 There's an xbindkeys file with shortcuts that can be used with a numpad.
+
+Escape cancels the save operation while on interactive mode.
 
 ## Information Saved
 
