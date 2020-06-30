@@ -4,6 +4,7 @@
 // notify-send
 // xdotool
 // wmctrl
+// xwininfo
 
 var fs = require('fs')
 var path = require('path')
