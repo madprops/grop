@@ -46,6 +46,6 @@ Restore group windows
 
 - Interactive mode lasts 5 seconds before it exits
 
-- Escape exits interactive mode immediately
+- Escape aborts the save operation and exits interactive mode
 
 - Group window information is saved to files like ~/.config/grop/mygroup1
