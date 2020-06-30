@@ -61,28 +61,28 @@
 # --- Swap ---
 
 "node /home/yo/code/grop/grop.js swap g1"
-  Ctrl+Mod2+Mod4 + KP_End
+  Control+Mod2+Mod4 + KP_End
 
 "node /home/yo/code/grop/grop.js swap g2"
-  Ctrl+Mod2+Mod4 + KP_Down
+  Control+Mod2+Mod4 + KP_Down
 
 "node /home/yo/code/grop/grop.js swap g3"
-  Ctrl+Mod2+Mod4 + KP_Next
+  Control+Mod2+Mod4 + KP_Next
 
 "node /home/yo/code/grop/grop.js swap g4"
-  Ctrl+Mod2+Mod4 + KP_Left
+  Control+Mod2+Mod4 + KP_Left
 
 "node /home/yo/code/grop/grop.js swap g5"
-  Ctrl+Mod2+Mod4 + KP_Begin
+  Control+Mod2+Mod4 + KP_Begin
 
 "node /home/yo/code/grop/grop.js swap g6"
-  Ctrl+Mod2+Mod4 + KP_Right
+  Control+Mod2+Mod4 + KP_Right
 
 "node /home/yo/code/grop/grop.js swap g7"
-  Ctrl+Mod2+Mod4 + KP_Home
+  Control+Mod2+Mod4 + KP_Home
 
 "node /home/yo/code/grop/grop.js swap g8"
-  Ctrl+Mod2+Mod4 + KP_Up
+  Control+Mod2+Mod4 + KP_Up
 
 "node /home/yo/code/grop/grop.js swap g9"
-  Ctrl+Mod2+Mod4 + KP_Prior
+  Control+Mod2+Mod4 + KP_Prior

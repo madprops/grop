@@ -100,6 +100,10 @@ if (!action) {
   console.info(s)
 }
 
+if (action === "restore") {
+  restore_group()
+}
+
 else if (action === "save") {
   console.info(`Saving windows for ${gname}`)
 
@@ -179,10 +183,6 @@ else if (action === "save") {
   ioHook.start()
 }
 
-else if (action === "restore") {
-  restore_group()
-}
-
 else if (action === "swap") {
   let windows = get_windows()
   let items = []
@@ -192,11 +192,14 @@ else if (action === "swap") {
     process.exit(0)
   }
 
+  let msg = `notify-send "Changing ${gname}\nPoint and press Ctrl on two windows\nWithin the next ${time_to_pick} seconds"`
+  execSync(msg)
+
   const ioHook = require('iohook')
 
   ioHook.on("keydown", event => {
     if (event.keycode == 1) {
-      execSync(`notify-send "Window swap terminated"`)
+      execSync(`notify-send "Window swap aborted"`)
       process.exit(0)
     }
 
