@@ -26,6 +26,8 @@ Same point and Ctrl mechanic
 
 This is still experimental
 
+![](https://i.imgur.com/Ac6ee0t.gif)
+
 ## About
 
 I made this for KDE Plasma since there are no independent workspaces per monitor.
