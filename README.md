@@ -26,7 +26,7 @@ Same point and Ctrl mechanic
 
 >grop switch mygroup1 mygroup2
 
-Switch the content of mygroup1 with mygroup2
+Switch the windows of mygroup1 with mygroup2
 
 ## About
 
