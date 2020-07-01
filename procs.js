@@ -14,10 +14,15 @@ module.exports = function (Grop) {
         let y = parseInt(split[4])
       
         console.info(`Restoring: ${window}`)
-        execSync(`wmctrl -ir ${id} -b add,maximized_vert,maximized_horz`)
-        execSync(`wmctrl -ir ${id} -b remove,maximized_vert,maximized_horz`)
-        execSync(`wmctrl -ia "${id}" -e 4,${x},${y},${width},${height}`)
-        execSync(`wmctrl -ia ${id}`)
+        
+        try {
+          execSync(`wmctrl -ir ${id} -b add,maximized_vert,maximized_horz 2> /dev/null`)
+          execSync(`wmctrl -ir ${id} -b remove,maximized_vert,maximized_horz 2> /dev/null`)
+          execSync(`wmctrl -ia "${id}" -e 4,${x},${y},${width},${height} 2> /dev/null`)
+          execSync(`wmctrl -ia ${id} 2> /dev/null`)
+        } catch (err) {
+          console.error("Error restoring. It probably doesn't exist anymore.")
+        }
       }
     }
   }
