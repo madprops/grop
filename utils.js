@@ -1,4 +1,5 @@
-var fs = require('fs')
+const fs = require('fs')
+const path = require('path')
 const execSync = require('child_process').execSync
 
 module.exports = function (Grop) {
@@ -12,30 +13,35 @@ module.exports = function (Grop) {
     }
   }
 
-  Grop.get_windows = function () {
-    if (!fs.existsSync(Grop.file_path)) {
+  Grop.get_windows = function (num) {
+    let file_path = Grop[`file_path_${num}`]
+
+    if (!fs.existsSync(file_path)) {
       console.info("Group does not exist.")
       process.exit(0)
     }
 
-    return fs.readFileSync(Grop.file_path, 'utf8').split("\n")
+    return fs.readFileSync(file_path, 'utf8').split("\n")
   }
 
   Grop.popup = function (msg) {
     execSync(`notify-send "${msg}"`)
   }
 
-  Grop.save_windows = function (content) {
+  Grop.save_windows = function (num, content) {
+    let file_path = Grop[`file_path_${num}`]
+    let parent = path.dirname(file_path)
+
     try {
-      if (fs.existsSync(Grop.file_path)) {
-        fs.unlinkSync(Grop.file_path)
+      if (fs.existsSync(file_path)) {
+        fs.unlinkSync(file_path)
       }
   
-      if (!fs.existsSync(Grop.root_path)){
-        fs.mkdirSync(Grop.root_path)
+      if (!fs.existsSync(parent)){
+        fs.mkdirSync(parent)
       }
   
-      fs.writeFileSync(Grop.file_path, content)
+      fs.writeFileSync(file_path, content)
     } catch (err) {
       console.error(err)
     }

@@ -6,16 +6,24 @@
 // wmctrl
 // xwininfo
 
-var path = require('path')
+const path = require('path')
 
 const Grop = {}
-let args = process.argv.slice(2)
-let home = require('os').homedir()
+const args = process.argv.slice(2)
+const home = require('os').homedir()
 
 Grop.action = args[0]
-Grop.group_name = args[1]
-Grop.root_path = path.normalize(`${home}/.config/grop`)
-Grop.file_path = path.normalize(`${Grop.root_path}/${Grop.group_name}`)
+
+if (args[1]) {
+  Grop.group_name_1 = args[1]
+  Grop.file_path_1 = path.normalize(`${home}/.config/grop/${Grop.group_name_1}`)
+}
+
+if (args[2]) {
+  Grop.group_name_2 = args[2]
+  Grop.file_path_2 = path.normalize(`${home}/.config/grop/${Grop.group_name_2}`)
+}
+
 Grop.time_to_pick = 5
 
 require('./procs')(Grop)
@@ -39,4 +47,8 @@ else if (Grop.action === "save") {
 
 else if (Grop.action === "swap") {
   Grop.swap_windows()
+}
+
+else if (Grop.action === "switch") {
+  Grop.switch_groups()
 }

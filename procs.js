@@ -1,8 +1,14 @@
+const fs = require('fs')
 const execSync = require('child_process').execSync
 
 module.exports = function (Grop) {
   Grop.restore_group = function () {
-    let windows = Grop.get_windows()
+    if (!Grop.group_name_1) {
+      console.info("A group name must be provided.")
+      process.exit(0)
+    }
+
+    let windows = Grop.get_windows(1)
 
     for (let window of windows) {
       if (window) {
@@ -28,9 +34,14 @@ module.exports = function (Grop) {
   }
 
   Grop.save_group = function () {
+    if (!Grop.group_name_1) {
+      console.info("A group name must be provided.")
+      process.exit(0)
+    }
+
     let windows = []
-    Grop.popup(`Saving ${Grop.group_name}\nPoint and press Ctrl on windows\nWithin the next ${Grop.time_to_pick} seconds`)
-    console.info(`Saving windows for ${Grop.group_name}`)
+    Grop.popup(`Saving ${Grop.group_name_1}\nPoint and press Ctrl on windows\nWithin the next ${Grop.time_to_pick} seconds`)
+    console.info(`Saving windows for ${Grop.group_name_1}`)
 
     Grop.start_hook(function (event) {
       if (event.keycode == 1) {
@@ -89,16 +100,21 @@ module.exports = function (Grop) {
       }
 
       Grop.popup(`${windows.length} ${wins} saved`)
-      Grop.save_windows(windows.join("\n"))
+      Grop.save_windows(1, windows.join("\n"))
       process.exit(0)
     })
   }
 
   Grop.swap_windows =function () {
-    let windows = Grop.get_windows()
+    if (!Grop.group_name_1) {
+      console.info("A group name must be provided.")
+      process.exit(0)
+    }
+
+    let windows = Grop.get_windows(1)
     let items = []
 
-    Grop.popup(`Changing ${Grop.group_name}\nPoint and press Ctrl on two windows\nWithin the next ${Grop.time_to_pick} seconds`)
+    Grop.popup(`Changing ${Grop.group_name_1}\nPoint and press Ctrl on two windows\nWithin the next ${Grop.time_to_pick} seconds`)
 
     Grop.start_hook(function (event) {
       if (event.keycode == 1) {
@@ -152,7 +168,7 @@ module.exports = function (Grop) {
 
           windows[items[0].index] = split.join(" ")
           windows[items[1].index] = split2.join(" ")
-          Grop.save_windows(windows.join("\n"))
+          Grop.save_windows(1, windows.join("\n"))
           Grop.popup("Windows swapped")
           Grop.restore_group()
           process.exit(0)
@@ -162,5 +178,32 @@ module.exports = function (Grop) {
       Grop.popup("Swap time is up")
       process.exit(0)
     })
+  }
+
+  Grop.switch_groups = function () {
+    if (!Grop.group_name_1 || !Grop.group_name_2) {
+      console.info("Two group names must be provided.")
+      process.exit(0)
+    }
+
+    if (!fs.existsSync(Grop.file_path_1)) {
+      console.info(`${Grop.group_name_1} does not exist.`)
+      process.exit(0)
+    }
+
+    if (!fs.existsSync(Grop.file_path_2)) {
+      console.info(`${Grop.group_name_2} does not exist.`)
+      process.exit(0)
+    }
+
+    let text_1 = fs.readFileSync(Grop.file_path_1, 'utf8')
+    let text_2 = fs.readFileSync(Grop.file_path_2, 'utf8')
+
+    Grop.save_windows(1, text_2)
+    Grop.save_windows(2, text_1)
+    
+    let msg = `${Grop.group_name_1} switched with ${Grop.group_name_2}`
+    console.info(msg)
+    Grop.popup(msg)
   }
 }
