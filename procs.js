@@ -3,11 +3,7 @@ const execSync = require('child_process').execSync
 
 module.exports = function (Grop) {
   Grop.restore_group = function () {
-    if (!Grop.group_name_1) {
-      console.info("A group name must be provided.")
-      process.exit(0)
-    }
-
+    Grop.check_groups(1)
     let windows = Grop.get_windows(1)
 
     for (let window of windows) {
@@ -34,12 +30,9 @@ module.exports = function (Grop) {
   }
 
   Grop.save_group = function () {
-    if (!Grop.group_name_1) {
-      console.info("A group name must be provided.")
-      process.exit(0)
-    }
-
+    Grop.check_groups(1)
     let windows = []
+
     Grop.popup(`Saving ${Grop.group_name_1}\nPoint and press Ctrl on windows\nWithin the next ${Grop.time_to_pick} seconds`)
     console.info(`Saving windows for ${Grop.group_name_1}`)
 
@@ -106,11 +99,7 @@ module.exports = function (Grop) {
   }
 
   Grop.swap_windows =function () {
-    if (!Grop.group_name_1) {
-      console.info("A group name must be provided.")
-      process.exit(0)
-    }
-
+    Grop.check_groups(1)
     let windows = Grop.get_windows(1)
     let items = []
 
@@ -181,10 +170,7 @@ module.exports = function (Grop) {
   }
 
   Grop.switch_groups = function () {
-    if (!Grop.group_name_1 || !Grop.group_name_2) {
-      console.info("Two group names must be provided.")
-      process.exit(0)
-    }
+    Grop.check_groups(2)
 
     if (!fs.existsSync(Grop.file_path_1)) {
       console.info(`${Grop.group_name_1} does not exist.`)

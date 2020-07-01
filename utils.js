@@ -61,4 +61,18 @@ module.exports = function (Grop) {
 
     ioHook.start()
   }
+
+  Grop.check_groups = function (n) {
+    if (n === 1) {
+      if (!Grop.group_name_1) {
+        console.info("A group name must be provided.")
+        process.exit(0)
+      }
+    } else if (n === 2) {
+      if (!Grop.group_name_1 || !Grop.group_name_2) {
+        console.info("Two group names must be provided.")
+        process.exit(0)
+      }
+    }
+  }
 }
