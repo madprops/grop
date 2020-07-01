@@ -24,7 +24,9 @@ Interactive mode to swap two windows from a group
 
 Same point and Ctrl mechanic
 
-This is still experimental
+>grop switch mygroup1 mygroup2
+
+Switch the content of mygroup1 with mygroup2
 
 ## About
 
