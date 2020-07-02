@@ -7,25 +7,31 @@ module.exports = function (Grop) {
     let windows = Grop.get_windows(1)
 
     for (let window of windows) {
-      if (window) {
-        let split = window.split(" ")
-        let id = split[0]
-        let width = parseInt(split[1])
-        let height = parseInt(split[2])
-        let x = parseInt(split[3])
-        let y = parseInt(split[4])
+      Grop.restore_window(window)
+    }
+  }
+
+  Grop.restore_window = function (window) {
+    if (!window) {
+      return
+    }
+
+    let split = window.split(" ")
+    let id = split[0]
+    let width = parseInt(split[1])
+    let height = parseInt(split[2])
+    let x = parseInt(split[3])
+    let y = parseInt(split[4])
+    
+    console.info(`Restoring: ${window}`)
       
-        console.info(`Restoring: ${window}`)
-        
-        try {
-          execSync(`wmctrl -ir ${id} -b add,maximized_vert,maximized_horz 2> /dev/null`)
-          execSync(`wmctrl -ir ${id} -b remove,maximized_vert,maximized_horz 2> /dev/null`)
-          execSync(`wmctrl -ia "${id}" -e 4,${x},${y},${width},${height} 2> /dev/null`)
-          execSync(`wmctrl -ia ${id} 2> /dev/null`)
-        } catch (err) {
-          console.error("Error restoring. It probably doesn't exist anymore.")
-        }
-      }
+    try {
+      execSync(`wmctrl -ir ${id} -b add,maximized_vert,maximized_horz 2> /dev/null`)
+      execSync(`wmctrl -ir ${id} -b remove,maximized_vert,maximized_horz 2> /dev/null`)
+      execSync(`wmctrl -ia "${id}" -e 4,${x},${y},${width},${height} 2> /dev/null`)
+      execSync(`wmctrl -ia ${id} 2> /dev/null`)
+    } catch (err) {
+      console.error("Error restoring. It probably doesn't exist anymore.")
     }
   }
 
@@ -33,13 +39,33 @@ module.exports = function (Grop) {
     Grop.check_groups(1)
     let windows = []
 
-    Grop.popup(`Saving ${Grop.group_name_1}\nPoint and press Ctrl on windows\nWithin the next ${Grop.time_to_pick} seconds`)
+    Grop.popup(`Saving ${Grop.group_name_1}\nPoint and press Ctrl on windows\nPress Escape to stop`)
     console.info(`Saving windows for ${Grop.group_name_1}`)
+
+    function done () {
+      if (windows.length === 0) {
+        Grop.popup("No windows were selected")
+        process.exit(0)
+      }
+
+      console.info(windows.join("\n"))
+
+      let wins
+
+      if (windows.length === 1) {
+        wins = "window"
+      } else {
+        wins = "windows"
+      }
+
+      Grop.popup(`${windows.length} ${wins} saved`)
+      Grop.save_windows(1, windows.join("\n"))
+      process.exit(0)
+    }
 
     Grop.start_hook(function (event) {
       if (event.keycode == 1) {
-        Grop.popup("Group save aborted")
-        process.exit(0)
+        done()
       }
 
       else if (event.ctrlKey) {
@@ -76,25 +102,6 @@ module.exports = function (Grop) {
         let window = `${winid} ${width} ${height} ${x} ${y}`
         windows.push(window)
       }
-    }, function () {
-      if (windows.length === 0) {
-        Grop.popup("No windows were selected")
-        process.exit(0)
-      }
-
-      console.info(windows.join("\n"))
-
-      let wins
-
-      if (windows.length === 1) {
-        wins = "window"
-      } else {
-        wins = "windows"
-      }
-
-      Grop.popup(`${windows.length} ${wins} saved`)
-      Grop.save_windows(1, windows.join("\n"))
-      process.exit(0)
     })
   }
 
@@ -102,13 +109,23 @@ module.exports = function (Grop) {
     Grop.check_groups(1)
     let windows = Grop.get_windows(1)
     let items = []
+    let changed = false
 
-    Grop.popup(`Changing ${Grop.group_name_1}\nPoint and press Ctrl on two windows\nWithin the next ${Grop.time_to_pick} seconds`)
+    Grop.popup(`Swapping ${Grop.group_name_1}\nPoint and press Ctrl on two windows\nPress Escape to stop`)
+
+    function done () {
+      Grop.popup("Swap mode terminated")
+      
+      if (changed) {
+        Grop.save_windows(1, windows.join("\n"))
+      }
+
+      process.exit(0) 
+    }
 
     Grop.start_hook(function (event) {
       if (event.keycode == 1) {
-        Grop.popup("Window swap aborted")
-        process.exit(0)
+        done()
       }
 
       else if (event.ctrlKey) {
@@ -157,15 +174,14 @@ module.exports = function (Grop) {
 
           windows[items[0].index] = split.join(" ")
           windows[items[1].index] = split2.join(" ")
-          Grop.save_windows(1, windows.join("\n"))
-          Grop.popup("Windows swapped")
-          Grop.restore_group()
-          process.exit(0)
+
+          Grop.restore_window(windows[items[0].index])
+          Grop.restore_window(windows[items[1].index])
+
+          items = []
+          changed = true
         }
       }
-    }, function () {
-      Grop.popup("Swap time is up")
-      process.exit(0)
     })
   }
 

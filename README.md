@@ -1,7 +1,8 @@
 ## Intended Usage
 
 - Trigger the interactive mode with the 'save' command
-- Point to each window you want to save with the mouse cursor and hit Ctrl within 5 seconds
+- Point to each window you want to save with the mouse cursor and hit Ctrl
+- Then press Escape to terminate save mode and save the window data to a file
 - When you want to restore that group trigger the 'restore' command
 - Save and Restore commands should be programmed to keyboard shortcuts
 - This is a way to simulate workspaces inside the same workspace

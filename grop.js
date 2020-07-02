@@ -16,14 +16,12 @@ Grop.action = args[0]
 
 if (!Grop.action) {
   let s = `Usage: 
-  grop save mygroup = Start interactive mode
+  grop save mygroup = Start save mode
   grop restore mygroup = Restore group windows
   grop swap mygroup = Swap two windows from a group
   grop switch mygroup1 mygroup2 = Switch two groups`
   console.info(s)
 }
-
-Grop.time_to_pick = 5
 
 require('./procs')(Grop)
 require('./utils')(Grop)

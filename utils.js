@@ -47,17 +47,13 @@ module.exports = function (Grop) {
     }
   }
 
-  Grop.start_hook = function (on_keydown, done) {
+  Grop.start_hook = function (on_keydown) {
     const ioHook = require('iohook')
     ioHook.on("keydown", on_keydown)
 
     process.on('exit', () => {
       ioHook.unload()
     })
-
-    setTimeout (function () {
-      done()
-    }, Grop.time_to_pick * 1000)
 
     ioHook.start()
   }
