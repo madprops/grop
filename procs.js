@@ -63,6 +63,8 @@ module.exports = function (Grop) {
       process.exit(0)
     }
 
+    Grop.start_max_timer("Save mode")
+
     Grop.start_hook(function (event) {
       if (event.keycode == 1) {
         done()
@@ -105,7 +107,7 @@ module.exports = function (Grop) {
     })
   }
 
-  Grop.swap_windows =function () {
+  Grop.swap_windows = function () {
     Grop.check_groups(1)
     let windows = Grop.get_windows(1)
     let items = []
@@ -122,6 +124,8 @@ module.exports = function (Grop) {
 
       process.exit(0) 
     }
+
+    Grop.start_max_timer("Swap mode")
 
     Grop.start_hook(function (event) {
       if (event.keycode == 1) {

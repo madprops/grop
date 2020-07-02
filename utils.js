@@ -25,7 +25,7 @@ module.exports = function (Grop) {
   }
 
   Grop.popup = function (msg) {
-    execSync(`notify-send "${msg}"`)
+    execSync(`notify-send "Grop: ${msg}"`)
   }
 
   Grop.save_windows = function (num, content) {
@@ -70,5 +70,12 @@ module.exports = function (Grop) {
         process.exit(0)
       }
     }
+  }
+
+  Grop.start_max_timer = function (mode) {
+    setTimeout(() => {
+      Grop.popup(`${mode} terminated`)
+      process.exit(0)
+    }, 20 * 1000);
   }
 }
