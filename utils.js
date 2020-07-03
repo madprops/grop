@@ -78,4 +78,24 @@ module.exports = function (Grop) {
       process.exit(0)
     }, 20 * 1000);
   }
+
+  Grop.window_in_list = function (id, windows) {
+    let index = 0
+    let ok = false
+
+    for (let i=0; i<windows.length; i++) {
+      if (windows[i].split(" ")[0] == id) {
+        ok = true
+        break
+      }
+
+      index += 1
+    }
+
+    if (!ok) {
+      index = -1
+    }
+
+    return index
+  }
 }

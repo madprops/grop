@@ -65,7 +65,7 @@ module.exports = function (Grop) {
 
     Grop.start_max_timer("Save mode")
 
-    Grop.start_hook(function (event) {
+    Grop.start_hook(async function (event) {
       if (event.keycode == 1) {
         done()
       }
@@ -76,12 +76,6 @@ module.exports = function (Grop) {
         cmd = 'xdotool getmouselocation --shell 2>/dev/null | grep WINDOW'
         output = execSync(cmd).toString()
         let winid = output.replace(/\D+/g, '').trim()
-
-        for (let window of windows) {
-          if (window.split(" ")[0] == winid) {
-            return
-          }
-        }
 
         cmd = `xwininfo -id "${winid}"`
         output = execSync(cmd).toString()
@@ -102,7 +96,21 @@ module.exports = function (Grop) {
         }
 
         let window = `${winid} ${width} ${height} ${x} ${y}`
-        windows.push(window)
+
+        if (Grop.window_in_list(winid, windows) === -1) {
+          windows.push(window)
+        }
+
+        // Visual feedback
+        execSync(`wmctrl -ia "${winid}" -e 4,${x},${y + 10},${width},${height} 2> /dev/null`)
+        await new Promise(done => setTimeout(() => done(), 100))
+        execSync(`wmctrl -ia "${winid}" -e 4,${x},${y - 10},${width},${height} 2> /dev/null`)
+        await new Promise(done => setTimeout(() => done(), 100))
+        execSync(`wmctrl -ia "${winid}" -e 4,${x + 10},${y},${width},${height} 2> /dev/null`)
+        await new Promise(done => setTimeout(() => done(), 100))
+        execSync(`wmctrl -ia "${winid}" -e 4,${x - 10},${y},${width},${height} 2> /dev/null`)
+        await new Promise(done => setTimeout(() => done(), 100))
+        execSync(`wmctrl -ia "${winid}" -e 4,${x},${y},${width},${height} 2> /dev/null`)
       }
     })
   }
@@ -137,19 +145,15 @@ module.exports = function (Grop) {
 
         cmd = 'xdotool getmouselocation --shell 2>/dev/null | grep WINDOW'
         output = execSync(cmd).toString()
+
         let winid = output.replace(/\D+/g, '').trim()
+        let index = Grop.window_in_list(winid, windows)
 
-        let ok = false
-        let index = 0
-
-        for (let i=0; i<windows.length; i++) {
-          if (windows[i].split(" ")[0] == winid) {
-            ok = true
-            break
-          }
-
-          index += 1
+        if (index === -1) {
+          return
         }
+        
+        let ok = true
 
         for (let item of items) {
           if (item.id === winid) {
