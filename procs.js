@@ -102,14 +102,15 @@ module.exports = function (Grop) {
         }
 
         // Visual feedback
+        let delay = 50
         execSync(`wmctrl -ia "${winid}" -e 4,${x},${y + 10},${width},${height} 2> /dev/null`)
-        await new Promise(done => setTimeout(() => done(), 100))
+        await new Promise(done => setTimeout(() => done(), delay))
         execSync(`wmctrl -ia "${winid}" -e 4,${x},${y - 10},${width},${height} 2> /dev/null`)
-        await new Promise(done => setTimeout(() => done(), 100))
+        await new Promise(done => setTimeout(() => done(), delay))
         execSync(`wmctrl -ia "${winid}" -e 4,${x + 10},${y},${width},${height} 2> /dev/null`)
-        await new Promise(done => setTimeout(() => done(), 100))
+        await new Promise(done => setTimeout(() => done(), delay))
         execSync(`wmctrl -ia "${winid}" -e 4,${x - 10},${y},${width},${height} 2> /dev/null`)
-        await new Promise(done => setTimeout(() => done(), 100))
+        await new Promise(done => setTimeout(() => done(), delay))
         execSync(`wmctrl -ia "${winid}" -e 4,${x},${y},${width},${height} 2> /dev/null`)
       }
     })
