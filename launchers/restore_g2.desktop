@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Restore Group 2
+GenericName=Restore Group 2
+Icon=view-restore
+Exec= sh -c "node /home/yo/code/grop/grop.js restore g2"
+Terminal=false
+Categories=Application;

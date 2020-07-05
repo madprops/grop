@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=Restore Group 3
+GenericName=Restore Group 3
+Icon=view-restore
+Exec= sh -c "node /home/yo/code/grop/grop.js restore g3"
+Terminal=false
+Categories=Application;

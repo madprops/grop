@@ -58,7 +58,7 @@ module.exports = function (Grop) {
         wins = "windows"
       }
 
-      Grop.popup(`${windows.length} ${wins} saved`)
+      Grop.popup(`${windows.length} ${wins} saved on ${Grop.group_name_1}`)
       Grop.save_windows(1, windows.join("\n"))
       process.exit(0)
     }

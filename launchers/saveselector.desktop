@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=Save Group
+GenericName=Save Group
+Icon=document-save
+Exec=/home/yo/code/grop/launchers/saveselector.sh
+Terminal=false
+Categories=Application;
