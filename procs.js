@@ -16,20 +16,15 @@ module.exports = function (Grop) {
       return
     }
 
-    let split = window.split(" ")
-    let id = split[0]
-    let width = parseInt(split[1])
-    let height = parseInt(split[2])
-    let x = parseInt(split[3])
-    let y = parseInt(split[4])
-    
     console.info(`Restoring: ${window}`)
+
+    let obj = Grop.get_window_props(window)
       
     try {
-      execSync(`wmctrl -ir ${id} -b add,maximized_vert,maximized_horz 2> /dev/null`)
-      execSync(`wmctrl -ir ${id} -b remove,maximized_vert,maximized_horz 2> /dev/null`)
-      execSync(`wmctrl -ia "${id}" -e 4,${x},${y},${width},${height} 2> /dev/null`)
-      execSync(`wmctrl -ia ${id} 2> /dev/null`)
+      execSync(`wmctrl -ir ${obj.id} -b add,maximized_vert,maximized_horz 2> /dev/null`)
+      execSync(`wmctrl -ir ${obj.id} -b remove,maximized_vert,maximized_horz 2> /dev/null`)
+      execSync(`wmctrl -ia "${obj.id}" -e 4,${obj.x},${obj.y},${obj.width},${obj.height} 2> /dev/null`)
+      execSync(`wmctrl -ia ${obj.id} 2> /dev/null`)
     } catch (err) {
       console.error("Error restoring. It probably doesn't exist anymore.")
     }
@@ -71,47 +66,11 @@ module.exports = function (Grop) {
       }
 
       else if (event.ctrlKey) {
-        let cmd, output
+        let window = await Grop.select_window()
 
-        cmd = 'xdotool getmouselocation --shell 2>/dev/null | grep WINDOW'
-        output = execSync(cmd).toString()
-        let winid = output.replace(/\D+/g, '').trim()
-
-        cmd = `xwininfo -id "${winid}"`
-        output = execSync(cmd).toString()
-
-        let width, height, x, y
-    
-        for(let line of output.split("\n")) {
-          if (line.includes('Width')) {
-            width = Grop.extract_number(line)
-          } else if (line.includes('Height')) {
-            height = Grop.extract_number(line)
-          } else if (line.includes('Absolute upper-left X')) {
-            x = Grop.extract_number(line)
-          } else if (line.includes('Absolute upper-left Y')) {
-            y = Grop.extract_number(line)
-            y = Grop.extract_number(line)
-          }
-        }
-
-        let window = `${winid} ${width} ${height} ${x} ${y}`
-
-        if (Grop.window_in_list(winid, windows) === -1) {
+        if (Grop.window_in_list(window.split(" ")[0], windows) === -1) {
           windows.push(window)
         }
-
-        // Visual feedback
-        let delay = 50
-        execSync(`wmctrl -ia "${winid}" -e 4,${x},${y + 10},${width},${height} 2> /dev/null`)
-        await new Promise(done => setTimeout(() => done(), delay))
-        execSync(`wmctrl -ia "${winid}" -e 4,${x},${y - 10},${width},${height} 2> /dev/null`)
-        await new Promise(done => setTimeout(() => done(), delay))
-        execSync(`wmctrl -ia "${winid}" -e 4,${x + 10},${y},${width},${height} 2> /dev/null`)
-        await new Promise(done => setTimeout(() => done(), delay))
-        execSync(`wmctrl -ia "${winid}" -e 4,${x - 10},${y},${width},${height} 2> /dev/null`)
-        await new Promise(done => setTimeout(() => done(), delay))
-        execSync(`wmctrl -ia "${winid}" -e 4,${x},${y},${width},${height} 2> /dev/null`)
       }
     })
   }
@@ -216,5 +175,60 @@ module.exports = function (Grop) {
     let msg = `${Grop.group_name_1} switched with ${Grop.group_name_2}`
     console.info(msg)
     Grop.popup(msg)
+  }
+
+  Grop.trio = function (side) {
+    let windows = []
+
+    async function done () {
+      if (windows.length !== 3) {
+        process.exit(0)
+      }
+
+      let id = windows[0].split(" ")[0]
+      execSync(`wmctrl -ir ${id} -b add,maximized_vert,maximized_horz 2> /dev/null`)
+      await new Promise(done => setTimeout(() => done(), 100))
+      let win = Grop.select_window(id)
+      let obj = Grop.get_window_props(win)
+      execSync(`wmctrl -ir ${obj.id} -b remove,maximized_vert,maximized_horz 2> /dev/null`)
+      await new Promise(done => setTimeout(() => done(), 100))
+      let cheight = obj.height / 3
+      let cwidth = obj.width / 2
+      let y = 0
+      let x
+
+      if (side === "right") {
+        x = obj.x + cwidth
+      } else if (side === "left") {
+        x = obj.x
+      }
+
+      for (let window of windows) {
+        let o = Grop.get_window_props(window)
+        let w = `${o.id} ${cwidth} ${cheight} ${x} ${y}`
+        Grop.restore_window(w)
+        y += cheight
+      }
+
+      process.exit(0)
+    }
+
+    Grop.start_hook(function (event) {
+      if (event.keycode == 1) {
+        done()
+      }
+
+      else if (event.ctrlKey) {
+        let window = Grop.select_window()
+
+        if (Grop.window_in_list(window.split(" ")[0], windows) === -1) {
+          windows.push(window)
+        }
+
+        if (windows.length === 3) {
+          done()
+        }
+      }
+    })    
   }
 }

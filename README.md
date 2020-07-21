@@ -29,6 +29,14 @@ Same point and Ctrl mechanic
 
 Switch the windows of mygroup1 with mygroup2
 
+>grop trio-right
+
+Pick three windows to tile in a vertical column to the right
+
+>grop trio-left
+
+Pick three windows to tile in a vertical column to the left
+
 ## About
 
 I made this for KDE Plasma since there are no independent workspaces per monitor.

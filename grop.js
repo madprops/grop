@@ -19,7 +19,9 @@ if (!Grop.action) {
   grop save mygroup = Start save mode
   grop restore mygroup = Restore group windows
   grop swap mygroup = Swap two windows from a group
-  grop switch mygroup1 mygroup2 = Switch two groups`
+  grop switch mygroup1 mygroup2 = Switch two groups
+  grop trio-right = Tile a 3-column on the right side
+  grop trio-left = Tile a 3-column on the left side`
   console.info(s)
 }
 
@@ -50,4 +52,12 @@ else if (Grop.action === "swap") {
 
 else if (Grop.action === "switch") {
   Grop.switch_groups()
+}
+
+else if (Grop.action === "trio-right") {
+  Grop.trio("right")
+}
+
+else if (Grop.action === "trio-left") {
+  Grop.trio("left")
 }

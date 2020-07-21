@@ -98,4 +98,45 @@ module.exports = function (Grop) {
 
     return index
   }
+
+  Grop.select_window = function (winid = "") {
+    let cmd, output
+
+    if (!winid) {
+      cmd = 'xdotool getmouselocation --shell 2>/dev/null | grep WINDOW'
+      output = execSync(cmd).toString()
+      winid = output.replace(/\D+/g, '').trim()
+    }
+
+    cmd = `xwininfo -id "${winid}"`
+    output = execSync(cmd).toString()
+
+    let width, height, x, y
+    
+    for(let line of output.split("\n")) {
+      if (line.includes('Width')) {
+        width = Grop.extract_number(line)
+      } else if (line.includes('Height')) {
+        height = Grop.extract_number(line)
+      } else if (line.includes('Absolute upper-left X')) {
+        x = Grop.extract_number(line)
+      } else if (line.includes('Absolute upper-left Y')) {
+        y = Grop.extract_number(line)
+        y = Grop.extract_number(line)
+      }
+    }
+
+    return `${winid} ${width} ${height} ${x} ${y}`
+  }
+
+  Grop.get_window_props = function (window) {
+    let obj = {}
+    let split = window.split(" ")
+    obj.id = split[0]
+    obj.width = parseInt(split[1])
+    obj.height = parseInt(split[2])
+    obj.x = parseInt(split[3])
+    obj.y = parseInt(split[4])
+    return obj
+  }
 }
