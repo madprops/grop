@@ -182,6 +182,7 @@ module.exports = function (Grop) {
 
     async function done () {
       if (windows.length !== 3) {
+        Grop.popup("Trio mode terminated")
         process.exit(0)
       }
 
@@ -212,6 +213,8 @@ module.exports = function (Grop) {
 
       process.exit(0)
     }
+
+    Grop.start_max_timer("Trio mode")
 
     Grop.start_hook(function (event) {
       if (event.keycode == 1) {
