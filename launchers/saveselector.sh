@@ -5,7 +5,7 @@ open="Open Group 1\nOpen Group 2\nOpen Group 3\nOpen Group 4\n"
 save="\nSave Group 1\nSave Group 2\nSave Group 3\nSave Group 4\n"
 c="${open}${save}"
 
-ans=$(echo -e "$c" | rofi -dmenu -width 10 -lines 9)
+ans=$(echo -e "$c" | rofi -dmenu -width 12 -lines 9 -me-select-entry '' -me-accept-entry 'MousePrimary' -font 'hack 21' -location 2 -yoffset 740)
 
 if [[ $ans == *"Save"* ]]; then
   num=$(echo "$ans" | sed "s/Save Group //")
